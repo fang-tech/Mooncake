@@ -1,3 +1,7 @@
+add_library(mooncake_store_test_main STATIC test_main.cpp)
+target_link_libraries(mooncake_store_test_main
+                      PUBLIC gflags gtest)
+
 function(add_store_test name)
   add_executable(${name} ${ARGN})
   target_include_directories(${name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -8,10 +12,11 @@ function(add_store_test name)
            cachelib_memory_allocator
            ${ETCD_WRAPPER_LIB}
            glog
+           gflags
            ibverbs
            gtest
-           gtest_main
-           pthread)
+           pthread
+    PRIVATE mooncake_store_test_main)
   add_test(NAME ${name} COMMAND ${name})
 endfunction()
 
@@ -28,8 +33,8 @@ function(add_ha_test name)
            gflags
            ibverbs
            gtest
-           gtest_main
-           pthread)
+           pthread
+           PRIVATE mooncake_store_test_main)
   add_test(NAME ${name} COMMAND ${name})
 endfunction()
 

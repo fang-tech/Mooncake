@@ -33,6 +33,13 @@ bool HostHasReservedHugepages() {
 
 class MmapArenaFallbackTest : public ::testing::Test {
    protected:
+    static void SetUpTestSuite() {
+        google::InitGoogleLogging("MmapArenaFallbackTest");
+        FLAGS_logtostderr = 1;
+    }
+
+    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
+
     void SetUp() override {
         FLAGS_logtostderr = 1;
         FLAGS_minloglevel = google::WARNING;
@@ -144,10 +151,3 @@ TEST_F(MmapArenaFallbackTest, AllocateFreeCycle) {
 }
 
 }  // namespace mooncake
-
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    google::InitGoogleLogging(argv[0]);
-    FLAGS_logtostderr = 1;
-    return RUN_ALL_TESTS();
-}

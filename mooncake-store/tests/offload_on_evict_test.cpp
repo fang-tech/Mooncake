@@ -381,8 +381,3 @@ TEST_F(OffloadOnEvictTest, ComboD_EvictionWorks) {
 }
 
 }  // namespace mooncake::test
-
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

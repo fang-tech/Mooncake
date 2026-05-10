@@ -941,8 +941,3 @@ TEST_F(SnapshotChildProcessTest, UploadFail_WithBackupDir_SavesAllFiles) {
 }
 
 }  // namespace mooncake::test
-
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

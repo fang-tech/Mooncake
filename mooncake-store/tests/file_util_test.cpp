@@ -122,8 +122,3 @@ TEST_F(FileUtilTest, EnsureDirExists_PathIsFile_ReturnsError) {
 }
 
 }  // namespace mooncake::test
-
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

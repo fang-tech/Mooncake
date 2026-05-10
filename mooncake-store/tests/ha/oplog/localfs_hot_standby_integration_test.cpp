@@ -63,6 +63,14 @@ class StandbyServiceGuard {
 
 class LocalFsHotStandbyIntegrationTest : public ::testing::Test {
    protected:
+    static void SetUpTestSuite() {
+        google::InitGoogleLogging("LocalFsHotStandbyIntegrationTest");
+        google::SetVLOGLevel("*", 1);
+        FLAGS_logtostderr = 1;
+    }
+
+    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
+
     void SetUp() override {
         // Generate a unique temp directory per test
         static std::atomic<int> counter{0};
@@ -452,12 +460,3 @@ TEST_F(LocalFsHotStandbyIntegrationTest, TestHighThroughputSync) {
 
 }  // namespace testing
 }  // namespace mooncake
-
-int main(int argc, char** argv) {
-    gflags::ParseCommandLineFlags(&argc, &argv, true);
-    google::InitGoogleLogging(argv[0]);
-    google::SetVLOGLevel("*", 1);
-    FLAGS_logtostderr = 1;
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

@@ -25,6 +25,13 @@ namespace fs = std::filesystem;
 class CatalogBackedSnapshotProviderTest
     : public ::testing::TestWithParam<CatalogBackendParam> {
    protected:
+    static void SetUpTestSuite() {
+        google::InitGoogleLogging("CatalogBackedSnapshotProviderTest");
+        FLAGS_logtostderr = 1;
+    }
+
+    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
+
     void SetUp() override {
         if (GetParam().requires_redis && FLAGS_redis_endpoint.empty()) {
             GTEST_SKIP() << "Redis endpoint is not configured";
@@ -140,13 +147,3 @@ INSTANTIATE_TEST_SUITE_P(
 
 }  // namespace
 }  // namespace mooncake::test
-
-int main(int argc, char** argv) {
-    google::InitGoogleLogging(argv[0]);
-    FLAGS_logtostderr = 1;
-    gflags::ParseCommandLineFlags(&argc, &argv, true);
-    ::testing::InitGoogleTest(&argc, argv);
-    const int result = RUN_ALL_TESTS();
-    google::ShutdownGoogleLogging();
-    return result;
-}

@@ -168,9 +168,3 @@ TEST(NonHAReconnectTest, ClientAutoReconnectAndRemount) {
 
 }  // namespace testing
 }  // namespace mooncake
-
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    mooncake::init_ylt_log_level();
-    return RUN_ALL_TESTS();
-}

@@ -135,8 +135,3 @@ TEST_F(OpLogSerializerTest, Deserialize_PayloadTooLarge) {
 }
 
 }  // namespace mooncake::test
-
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

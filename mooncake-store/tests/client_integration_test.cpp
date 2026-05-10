@@ -1771,14 +1771,3 @@ TEST_F(ClientIntegrationTest, MountSegmentAndGetIdAndUnmountSegmentById) {
 }  // namespace testing
 
 }  // namespace mooncake
-
-int main(int argc, char** argv) {
-    // Initialize Google Test
-    ::testing::InitGoogleTest(&argc, argv);
-
-    // Initialize Google's flags library
-    gflags::ParseCommandLineFlags(&argc, &argv, false);
-    mooncake::init_ylt_log_level();
-    // Run all tests
-    return RUN_ALL_TESTS();
-}

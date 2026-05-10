@@ -1604,10 +1604,3 @@ TEST_F(OffsetAllocatorTest, ChainedAllocationAndDeserialization) {
 }
 
 }  // namespace mooncake::offset_allocator
-
-int main(int argc, char** argv) {
-    // Initialize Google Test
-    ::testing::InitGoogleTest(&argc, argv);
-
-    return RUN_ALL_TESTS();
-}
