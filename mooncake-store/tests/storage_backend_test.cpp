@@ -102,8 +102,6 @@ class StorageBackendTest : public ::testing::Test {
     }
 
     void SetUp() override {
-        google::InitGoogleLogging("StorageBackendTest");
-        FLAGS_logtostderr = true;
         data_path = std::filesystem::current_path().string() + "/data";
         // Remove all leftover files and subdirectories from previous runs
         if (fs::exists(data_path)) {
@@ -128,7 +126,6 @@ class StorageBackendTest : public ::testing::Test {
     }
 
     void TearDown() override {
-        google::ShutdownGoogleLogging();
         LOG(INFO) << "Clear test data...";
         // Clean up all test files and subdirectories
         if (fs::exists(data_path)) {

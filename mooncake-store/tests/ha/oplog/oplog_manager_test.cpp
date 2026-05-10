@@ -15,12 +15,10 @@ namespace mooncake::test {
 class OpLogManagerTest : public ::testing::Test {
    protected:
     void SetUp() override {
-        google::InitGoogleLogging("OpLogManagerTest");
-        FLAGS_logtostderr = 1;
         manager_ = std::make_unique<OpLogManager>();
     }
 
-    void TearDown() override { google::ShutdownGoogleLogging(); }
+    void TearDown() override {}
 
     OpLogManager& M() { return *manager_; }
 

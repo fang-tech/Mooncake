@@ -64,12 +64,8 @@ class StandbyServiceGuard {
 class LocalFsHotStandbyIntegrationTest : public ::testing::Test {
    protected:
     static void SetUpTestSuite() {
-        google::InitGoogleLogging("LocalFsHotStandbyIntegrationTest");
         google::SetVLOGLevel("*", 1);
-        FLAGS_logtostderr = 1;
     }
-
-    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
 
     void SetUp() override {
         // Generate a unique temp directory per test

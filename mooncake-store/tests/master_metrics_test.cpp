@@ -23,14 +23,7 @@ class MasterMetricsTest : public ::testing::Test {
         std::string body;
     };
 
-    void SetUp() override {
-        google::InitGoogleLogging("MasterMetricsTest");
-        FLAGS_logtostderr = true;
-    }
-
     std::vector<Replica::Descriptor> replica_list;
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
 
     HttpResponse FetchUrl(int port, const std::string& path) {
         coro_http::coro_http_client client;

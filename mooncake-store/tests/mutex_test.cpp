@@ -10,15 +10,6 @@
 
 namespace mooncake::test {
 
-class SharedMutexTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        google::InitGoogleLogging("SharedMutexTest");
-        FLAGS_logtostderr = true;
-    }
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-};
-
 TEST(SharedMutexTest, CanLockExclusive) {
     SharedMutex mtx;
     EXPECT_NO_THROW({
@@ -172,15 +163,6 @@ TEST(SharedMutexTest, HandlesNullptrSafely) {
     EXPECT_NO_THROW(locker.unlock());
     // Should not crash under any operation
 }
-
-class SpinLockTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        google::InitGoogleLogging("SpinLockTest");
-        FLAGS_logtostderr = true;
-    }
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-};
 
 TEST(SpinLockTest, LockUnlockTest) {
     SpinLock lock;

@@ -101,11 +101,6 @@ class ClientIntegrationTest : public ::testing::Test {
     }
 
     static void SetUpTestSuite() {
-        // Initialize glog
-        google::InitGoogleLogging("ClientIntegrationTest");
-
-        FLAGS_logtostderr = 1;
-
         // Override flags from environment variables if present
         if (getenv("PROTOCOL")) FLAGS_protocol = getenv("PROTOCOL");
         if (getenv("DEVICE_NAME")) FLAGS_device_name = getenv("DEVICE_NAME");
@@ -135,7 +130,6 @@ class ClientIntegrationTest : public ::testing::Test {
         CleanupSegment();
         CleanupClients();
         master_.Stop();
-        google::ShutdownGoogleLogging();
     }
 
     static void InitializeSegment() {

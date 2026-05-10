@@ -1,6 +1,6 @@
 add_library(mooncake_store_test_main STATIC test_main.cpp)
 target_link_libraries(mooncake_store_test_main
-                      PUBLIC gflags gtest)
+                      PUBLIC gflags glog gtest)
 
 function(add_store_test name)
   add_executable(${name} ${ARGN})
@@ -34,7 +34,7 @@ function(add_ha_test name)
            ibverbs
            gtest
            pthread
-           PRIVATE mooncake_store_test_main)
+    PRIVATE mooncake_store_test_main)
   add_test(NAME ${name} COMMAND ${name})
 endfunction()
 

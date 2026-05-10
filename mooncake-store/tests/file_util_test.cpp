@@ -18,9 +18,6 @@ class FileUtilTest : public ::testing::Test {
     const std::string& tmp_dir() const { return tmp_dir_; }
 
     void SetUp() override {
-        google::InitGoogleLogging("FileUtilTest");
-        FLAGS_logtostderr = true;
-
         std::string tmpl =
             (fs::temp_directory_path() / "file_util_test_XXXXXX").string();
         char* dir = mkdtemp(tmpl.data());
@@ -32,7 +29,6 @@ class FileUtilTest : public ::testing::Test {
         if (!tmp_dir().empty() && fs::exists(tmp_dir())) {
             fs::remove_all(tmp_dir());
         }
-        google::ShutdownGoogleLogging();
     }
 
     // Helper: read file content back as string

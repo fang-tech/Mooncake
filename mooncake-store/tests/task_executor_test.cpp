@@ -24,13 +24,6 @@ namespace mooncake {
 // integration. Full end-to-end tests are in task_integration_test.cpp
 class TaskExecutorTest : public ::testing::Test {
    protected:
-    void SetUp() override {
-        google::InitGoogleLogging("TaskExecutorTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-
     // Helper to create a valid memory replica descriptor
     Replica::Descriptor CreateMemoryReplicaDescriptor(
         ReplicaID id, const std::string& segment_name, size_t size = 1024) {

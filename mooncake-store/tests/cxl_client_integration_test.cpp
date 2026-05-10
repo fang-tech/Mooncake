@@ -110,11 +110,6 @@ class ClientIntegrationTestCxl : public ::testing::Test {
     }
 
     static void SetUpTestSuite() {
-        // Initialize glog
-        google::InitGoogleLogging("ClientIntegrationTestCxl");
-
-        FLAGS_logtostderr = 1;
-
         tmp_fd = open(FLAGS_cxl_device_name.c_str(), O_RDWR | O_CREAT, 0666);
         ASSERT_GE(tmp_fd, 0);
         ASSERT_EQ(ftruncate(tmp_fd, FLAGS_cxl_device_size), 0);
@@ -152,7 +147,6 @@ class ClientIntegrationTestCxl : public ::testing::Test {
         CleanupSegment();
         CleanupClients();
         master_.Stop();
-        google::ShutdownGoogleLogging();
         if (tmp_fd >= 0) {
             close(tmp_fd);
             unlink(FLAGS_cxl_device_name.c_str());

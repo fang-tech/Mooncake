@@ -88,17 +88,7 @@ class ExampleClassWithException {
     int value_;
 };
 
-class SerializerTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        google::InitGoogleLogging("SerializerTest");
-        FLAGS_logtostderr = true;
-    }
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-};
-
-TEST_F(SerializerTest, ExampleClassSerialization) {
+TEST(SerializerTest, ExampleClassSerialization) {
     // Create an example object
     ExampleClass original(42, 3.14159, "Test Object");
 
@@ -118,7 +108,7 @@ TEST_F(SerializerTest, ExampleClassSerialization) {
     EXPECT_TRUE(*restored == original);
 }
 
-TEST_F(SerializerTest, ExampleClassSerializationWithSharedPtr) {
+TEST(SerializerTest, ExampleClassSerializationWithSharedPtr) {
     // Test with shared_ptr
     auto original =
         std::make_shared<ExampleClass>(777, 2.718, "Shared Pointer Test");
@@ -131,7 +121,7 @@ TEST_F(SerializerTest, ExampleClassSerializationWithSharedPtr) {
     EXPECT_TRUE(*restored == *original);
 }
 
-TEST_F(SerializerTest, ExampleClassSerializationNullPointer) {
+TEST(SerializerTest, ExampleClassSerializationNullPointer) {
     // Test with null shared_ptr
     std::shared_ptr<ExampleClass> null_ptr = nullptr;
 
@@ -139,7 +129,7 @@ TEST_F(SerializerTest, ExampleClassSerializationNullPointer) {
     ASSERT_EQ(serialize_to(null_ptr, buffer), ErrorCode::INVALID_PARAMS);
 }
 
-TEST_F(SerializerTest, ExampleClassDeserializationCorruptedBuffer) {
+TEST(SerializerTest, ExampleClassDeserializationCorruptedBuffer) {
     // Create a valid object and serialize it
     ExampleClass original(1, 1.0, "Test");
     std::vector<SerializedByte> buffer;
@@ -153,7 +143,7 @@ TEST_F(SerializerTest, ExampleClassDeserializationCorruptedBuffer) {
     EXPECT_EQ(restored, nullptr);
 }
 
-TEST_F(SerializerTest, ExampleClassDeserializationWithException) {
+TEST(SerializerTest, ExampleClassDeserializationWithException) {
     // Create a valid object and serialize it
     ExampleClassWithException original(1);
     std::vector<SerializedByte> buffer;

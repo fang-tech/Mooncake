@@ -58,15 +58,13 @@ std::string MakeValidPayload(uint64_t client_id_first = 1,
 class OpLogApplierTest : public ::testing::Test {
    protected:
     void SetUp() override {
-        google::InitGoogleLogging("OpLogApplierTest");
-        FLAGS_logtostderr = 1;
         mock_metadata_store_ = std::make_unique<MockMetadataStore>();
         cluster_id_ = "test_cluster_001";
         applier_ = std::make_unique<OpLogApplier>(mock_metadata_store_.get(),
                                                   cluster_id_);
     }
 
-    void TearDown() override { google::ShutdownGoogleLogging(); }
+    void TearDown() override {}
 
     std::unique_ptr<MockMetadataStore> mock_metadata_store_;
     std::unique_ptr<OpLogApplier> applier_;
@@ -218,15 +216,13 @@ TEST_F(OpLogApplierTest, TestApplyDuplicateSequenceId) {
 class OpLogApplierGapTest : public ::testing::Test {
    protected:
     void SetUp() override {
-        google::InitGoogleLogging("OpLogApplierGapTest");
-        FLAGS_logtostderr = 1;
         mock_metadata_store_ = std::make_unique<MockMetadataStore>();
         mock_oplog_store_ = std::make_unique<MockOpLogStore>();
         applier_ = std::make_unique<OpLogApplier>(mock_metadata_store_.get(),
                                                   "test_cluster",
                                                   mock_oplog_store_.get());
     }
-    void TearDown() override { google::ShutdownGoogleLogging(); }
+    void TearDown() override {}
 
     std::unique_ptr<MockMetadataStore> mock_metadata_store_;
     std::unique_ptr<MockOpLogStore> mock_oplog_store_;

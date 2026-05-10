@@ -12,13 +12,6 @@ namespace mooncake::test {
 
 class HAMetricManagerTest : public ::testing::Test {
    protected:
-    void SetUp() override {
-        google::InitGoogleLogging("HAMetricManagerTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-
     HAMetricManager& M() { return HAMetricManager::instance(); }
 };
 

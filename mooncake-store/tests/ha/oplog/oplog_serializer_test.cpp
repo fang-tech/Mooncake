@@ -10,12 +10,6 @@ namespace mooncake::test {
 
 class OpLogSerializerTest : public ::testing::Test {
    protected:
-    void SetUp() override {
-        google::InitGoogleLogging("OpLogSerializerTest");
-        FLAGS_logtostderr = 1;
-    }
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-
     static OpLogEntry MakeEntry(uint64_t seq, OpType type,
                                 const std::string& key,
                                 const std::string& payload) {

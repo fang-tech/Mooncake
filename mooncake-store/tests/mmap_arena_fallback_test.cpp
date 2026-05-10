@@ -33,15 +33,7 @@ bool HostHasReservedHugepages() {
 
 class MmapArenaFallbackTest : public ::testing::Test {
    protected:
-    static void SetUpTestSuite() {
-        google::InitGoogleLogging("MmapArenaFallbackTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
-
     void SetUp() override {
-        FLAGS_logtostderr = 1;
         FLAGS_minloglevel = google::WARNING;
         setenv("MC_DISABLE_MMAP_ARENA", "1", 1);
     }

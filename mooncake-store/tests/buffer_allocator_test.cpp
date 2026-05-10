@@ -18,16 +18,6 @@ namespace mooncake {
 // Test fixture for BufferAllocator tests
 class BufferAllocatorTest : public ::testing::Test {
    protected:
-    void SetUp() override {
-        // Initialize glog for logging
-        google::InitGoogleLogging("BufferAllocatorTest");
-        FLAGS_logtostderr = 1;  // Output logs to stderr
-    }
-
-    void TearDown() override {
-        // Cleanup glog
-        google::ShutdownGoogleLogging();
-    }
 
     // Helper function to create a BufferAllocator for testing
     std::shared_ptr<BufferAllocatorBase> CreateTestAllocator(
@@ -206,19 +196,8 @@ TEST_F(BufferAllocatorTest, ParallelAllocation) {
     }
 }
 
-// Test fixture for SimpleAllocator tests
-class SimpleAllocatorTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        google::InitGoogleLogging("SimpleAllocatorTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-};
-
 // Test basic memory allocation and deallocation
-TEST_F(SimpleAllocatorTest, BasicAllocationAndDeallocation) {
+TEST(SimpleAllocatorTest, BasicAllocationAndDeallocation) {
     const size_t total_size = 1024 * 1024 * 16;  // 16MB (multiple of 4MB)
     SimpleAllocator allocator(total_size);
 
@@ -239,7 +218,7 @@ TEST_F(SimpleAllocatorTest, BasicAllocationAndDeallocation) {
 }
 
 // Test multiple allocations and deallocations
-TEST_F(SimpleAllocatorTest, MultipleAllocations) {
+TEST(SimpleAllocatorTest, MultipleAllocations) {
     const size_t total_size = 1024 * 1024 * 16;  // 16MB
     SimpleAllocator allocator(total_size);
 
@@ -262,7 +241,7 @@ TEST_F(SimpleAllocatorTest, MultipleAllocations) {
 }
 
 // Test allocation request larger than available space
-TEST_F(SimpleAllocatorTest, AllocationTooLarge) {
+TEST(SimpleAllocatorTest, AllocationTooLarge) {
     const size_t total_size = 1024 * 1024 * 16;  // 16MB
     SimpleAllocator allocator(total_size);
 
@@ -271,7 +250,7 @@ TEST_F(SimpleAllocatorTest, AllocationTooLarge) {
 }
 
 // Stress test with many small allocations
-TEST_F(SimpleAllocatorTest, StressTest) {
+TEST(SimpleAllocatorTest, StressTest) {
     const size_t total_size = 1024 * 1024 * 256;  // 256MB for stress testing
     SimpleAllocator allocator(total_size);
 

@@ -48,9 +48,6 @@ LoadedSnapshot MakeSnapshot(std::string snapshot_id, uint64_t seq_id,
 class HotStandbyServiceTest : public ::testing::Test {
    protected:
     void SetUp() override {
-        google::InitGoogleLogging("HotStandbyServiceTest");
-        FLAGS_logtostderr = 1;
-
         config_.enable_verification = false;
         config_.max_replication_lag_entries = 1000;
 
@@ -63,7 +60,6 @@ class HotStandbyServiceTest : public ::testing::Test {
         if (service_) {
             service_->Stop();
         }
-        google::ShutdownGoogleLogging();
     }
 
     HotStandbyConfig config_;

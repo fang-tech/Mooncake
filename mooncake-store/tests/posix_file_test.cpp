@@ -10,9 +10,6 @@ namespace mooncake {
 class PosixFileTest : public ::testing::Test {
    protected:
     void SetUp() override {
-        google::InitGoogleLogging("PosixFileTest");
-        FLAGS_logtostderr = 1;
-
         // Create and open a test file
         test_filename = "test_file.txt";
         test_fd = open(test_filename.c_str(), O_CREAT | O_RDWR, 0644);
@@ -20,7 +17,6 @@ class PosixFileTest : public ::testing::Test {
     }
 
     void TearDown() override {
-        google::ShutdownGoogleLogging();
         if (test_fd >= 0) {
             close(test_fd);
         }

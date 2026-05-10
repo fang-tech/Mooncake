@@ -9,17 +9,7 @@
 
 namespace mooncake::test {
 
-class SsdMetricsTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        google::InitGoogleLogging("SsdMetricsTest");
-        FLAGS_logtostderr = true;
-    }
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-};
-
-TEST_F(SsdMetricsTest, InitialValuesTest) {
+TEST(SsdMetricsTest, InitialValuesTest) {
     SsdMetric metrics;
 
     ASSERT_EQ(metrics.ssd_read_bytes.value(), 0);
@@ -42,7 +32,7 @@ TEST_F(SsdMetricsTest, InitialValuesTest) {
     ASSERT_EQ(metrics.ssd_total_ops.value(), 0);
 }
 
-TEST_F(SsdMetricsTest, ReadMetricsTest) {
+TEST(SsdMetricsTest, ReadMetricsTest) {
     SsdMetric metrics;
 
     // Simulate a successful BatchLoad of 3 keys totaling 1MB
@@ -66,7 +56,7 @@ TEST_F(SsdMetricsTest, ReadMetricsTest) {
     ASSERT_EQ(metrics.ssd_write_bytes.value(), 0);
 }
 
-TEST_F(SsdMetricsTest, WriteMetricsTest) {
+TEST(SsdMetricsTest, WriteMetricsTest) {
     SsdMetric metrics;
 
     // Simulate a successful BatchOffload of 10 keys totaling 5MB
@@ -82,7 +72,7 @@ TEST_F(SsdMetricsTest, WriteMetricsTest) {
     ASSERT_EQ(metrics.ssd_read_bytes.value(), 0);
 }
 
-TEST_F(SsdMetricsTest, TotalMetricsTest) {
+TEST(SsdMetricsTest, TotalMetricsTest) {
     SsdMetric metrics;
 
     // Simulate read: 3 keys, 1MB
@@ -123,7 +113,7 @@ TEST_F(SsdMetricsTest, TotalMetricsTest) {
     std::cout << "Total Metrics Summary:\n" << summary << std::endl;
 }
 
-TEST_F(SsdMetricsTest, FailureNotCountedTest) {
+TEST(SsdMetricsTest, FailureNotCountedTest) {
     SsdMetric metrics;
 
     // Simulate: nothing recorded (as if BatchLoad failed and we skipped
@@ -143,7 +133,7 @@ TEST_F(SsdMetricsTest, FailureNotCountedTest) {
     ASSERT_EQ(metrics.ssd_read_bytes.value(), 4096);
 }
 
-TEST_F(SsdMetricsTest, ConcurrentTest) {
+TEST(SsdMetricsTest, ConcurrentTest) {
     SsdMetric metrics;
 
     const int num_threads = 8;
@@ -178,7 +168,7 @@ TEST_F(SsdMetricsTest, ConcurrentTest) {
     ASSERT_EQ(metrics.ssd_total_bytes.value(), expected_ops * (4096 + 8192));
 }
 
-TEST_F(SsdMetricsTest, SerializeTest) {
+TEST(SsdMetricsTest, SerializeTest) {
     SsdMetric metrics;
 
     // Add some data so serialization produces output
@@ -225,7 +215,7 @@ TEST_F(SsdMetricsTest, SerializeTest) {
     std::cout << "Serialized SSD Metrics:\n" << serialized << std::endl;
 }
 
-TEST_F(SsdMetricsTest, SummaryMetricsTest) {
+TEST(SsdMetricsTest, SummaryMetricsTest) {
     SsdMetric metrics;
 
     // Test empty metrics - no throughput shown when bytes=0
@@ -276,7 +266,7 @@ TEST_F(SsdMetricsTest, SummaryMetricsTest) {
     std::cout << "SSD Metrics Summary:\n" << summary << std::endl;
 }
 
-TEST_F(SsdMetricsTest, ThroughputCalculationTest) {
+TEST(SsdMetricsTest, ThroughputCalculationTest) {
     SsdMetric metrics;
 
     // Record 10MB of reads and 20MB of writes
@@ -332,7 +322,7 @@ TEST_F(SsdMetricsTest, ThroughputCalculationTest) {
     std::cout << "Throughput Test Summary:\n" << summary << std::endl;
 }
 
-TEST_F(SsdMetricsTest, IntegrationWithClientMetric) {
+TEST(SsdMetricsTest, IntegrationWithClientMetric) {
     ClientMetric client_metrics;
 
     // Add SSD data via client_metrics.ssd_metric
@@ -353,7 +343,7 @@ TEST_F(SsdMetricsTest, IntegrationWithClientMetric) {
     std::cout << "Client Metrics with SSD:\n" << summary << std::endl;
 }
 
-TEST_F(SsdMetricsTest, SerializeWithDynamicLabels) {
+TEST(SsdMetricsTest, SerializeWithDynamicLabels) {
     std::map<std::string, std::string> labels = {{"instance_id", "test123"},
                                                  {"cluster_id", "cluster_abc"}};
     SsdMetric metrics(labels);
@@ -372,7 +362,7 @@ TEST_F(SsdMetricsTest, SerializeWithDynamicLabels) {
     std::cout << "SSD Metrics with labels:\n" << serialized << std::endl;
 }
 
-TEST_F(SsdMetricsTest, LatencyBucketBoundaryTest) {
+TEST(SsdMetricsTest, LatencyBucketBoundaryTest) {
     SsdMetric metrics;
 
     // kSsdLatencyBucket = {50, 100, 200, 500, 1000, ... 10000000, 30000000}
@@ -411,7 +401,7 @@ TEST_F(SsdMetricsTest, LatencyBucketBoundaryTest) {
               << serialized << std::endl;
 }
 
-TEST_F(SsdMetricsTest, EmptyBatchMetricsTest) {
+TEST(SsdMetricsTest, EmptyBatchMetricsTest) {
     SsdMetric metrics;
 
     // Simulate recording metrics for an empty batch (0 keys, 0 bytes)

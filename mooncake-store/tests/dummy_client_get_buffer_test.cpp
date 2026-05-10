@@ -67,13 +67,6 @@ static constexpr size_t kHotWarmCount = 4;    // keys to warm into hot cache
 
 class DummyClientGetBufferTest : public ::testing::Test {
    protected:
-    static void SetUpTestSuite() {
-        google::InitGoogleLogging("DummyClientGetBufferTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
-
     void SetUp() override {
         if (getenv("PROTOCOL")) FLAGS_protocol = getenv("PROTOCOL");
         if (getenv("DEVICE_NAME")) FLAGS_device_name = getenv("DEVICE_NAME");

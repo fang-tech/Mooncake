@@ -17,22 +17,8 @@ namespace mooncake {
 // Test fixture for TransferTask tests
 // TODO: Currently, this test does not cover TransferSubmitter and
 // TransferEngine integration. Will add more tests in the future.
-class TransferTaskTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        // Initialize glog for logging
-        google::InitGoogleLogging("TransferTaskTest");
-        FLAGS_logtostderr = 1;  // Output logs to stderr
-    }
-
-    void TearDown() override {
-        // Cleanup glog
-        google::ShutdownGoogleLogging();
-    }
-};
-
 // Test basic MemcpyOperation functionality
-TEST_F(TransferTaskTest, MemcpyOperationBasic) {
+TEST(TransferTaskTest, MemcpyOperationBasic) {
     const size_t data_size = 1024;
     std::vector<char> src_data(data_size, 'A');
     std::vector<char> dest_data(data_size, 'B');
@@ -56,7 +42,7 @@ TEST_F(TransferTaskTest, MemcpyOperationBasic) {
 }
 
 // Test MemcpyOperationState functionality
-TEST_F(TransferTaskTest, MemcpyOperationState) {
+TEST(TransferTaskTest, MemcpyOperationState) {
     auto state = std::make_shared<MemcpyOperationState>();
 
     // Initially not completed
@@ -70,7 +56,7 @@ TEST_F(TransferTaskTest, MemcpyOperationState) {
 }
 
 // Test MemcpyWorkerPool basic functionality
-TEST_F(TransferTaskTest, MemcpyWorkerPoolBasic) {
+TEST(TransferTaskTest, MemcpyWorkerPoolBasic) {
     MemcpyWorkerPool pool;
 
     const size_t data_size = 512;
@@ -101,7 +87,7 @@ TEST_F(TransferTaskTest, MemcpyWorkerPoolBasic) {
 }
 
 // Test multiple memcpy operations in one task
-TEST_F(TransferTaskTest, MemcpyWorkerPoolMultipleOperations) {
+TEST(TransferTaskTest, MemcpyWorkerPoolMultipleOperations) {
     MemcpyWorkerPool pool;
 
     const size_t num_ops = 3;
@@ -145,7 +131,7 @@ TEST_F(TransferTaskTest, MemcpyWorkerPoolMultipleOperations) {
 }
 
 // Test TransferStrategy enum and stream operator
-TEST_F(TransferTaskTest, TransferStrategyEnum) {
+TEST(TransferTaskTest, TransferStrategyEnum) {
     // Test enum values
     EXPECT_EQ(static_cast<int>(TransferStrategy::LOCAL_MEMCPY), 0);
     EXPECT_EQ(static_cast<int>(TransferStrategy::TRANSFER_ENGINE), 1);

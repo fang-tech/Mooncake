@@ -19,11 +19,6 @@ namespace mooncake::test {
 
 class MasterServiceTest : public ::testing::Test {
    protected:
-    void SetUp() override {
-        google::InitGoogleLogging("MasterServiceTest");
-        FLAGS_logtostderr = true;
-    }
-
     struct MountedSegmentContext {
         UUID segment_id;
         UUID client_id;
@@ -150,7 +145,7 @@ class MasterServiceTest : public ::testing::Test {
 
     std::vector<Replica::Descriptor> replica_list;
 
-    void TearDown() override { google::ShutdownGoogleLogging(); }
+    void TearDown() override {}
 };
 
 std::string GenerateKeyForSegment(const UUID& client_id,

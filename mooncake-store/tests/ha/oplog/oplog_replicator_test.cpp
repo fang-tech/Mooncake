@@ -86,8 +86,6 @@ OpLogEntry MakeEntry(uint64_t seq, OpType type, const std::string& key,
 class OpLogReplicatorTest : public ::testing::Test {
    protected:
     void SetUp() override {
-        google::InitGoogleLogging("OpLogReplicatorTest");
-        FLAGS_logtostderr = 1;
         metadata_store_ = std::make_unique<MinimalMockMetadataStore>();
         applier_ =
             std::make_unique<OpLogApplier>(metadata_store_.get(), "test");
@@ -100,7 +98,6 @@ class OpLogReplicatorTest : public ::testing::Test {
         if (replicator_) {
             replicator_->Stop();
         }
-        google::ShutdownGoogleLogging();
     }
 
     MockOpLogChangeNotifier& Notifier() { return *notifier_; }

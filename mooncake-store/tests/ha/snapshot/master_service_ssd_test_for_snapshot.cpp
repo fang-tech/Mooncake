@@ -4,17 +4,9 @@ namespace mooncake::test {
 
 class MasterServiceSSDSnapshotTest : public MasterServiceSnapshotTestBase {
    protected:
-    static bool glog_initialized_;
-
     void SetUp() override {
         // Call base class SetUp first to reset MasterMetricManager state
         MasterServiceSnapshotTestBase::SetUp();
-
-        if (!glog_initialized_) {
-            google::InitGoogleLogging("MasterServiceSSDSnapshotTest");
-            FLAGS_logtostderr = true;
-            glog_initialized_ = true;
-        }
     }
 
     // Create MasterService with SSD feature and assign to class member
@@ -32,7 +24,6 @@ class MasterServiceSSDSnapshotTest : public MasterServiceSnapshotTestBase {
     }
 };
 
-bool MasterServiceSSDSnapshotTest::glog_initialized_ = false;
 
 TEST_F(MasterServiceSSDSnapshotTest, PutEndBothReplica) {
     CreateMasterServiceWithSSDFeat("/mnt/ssd");

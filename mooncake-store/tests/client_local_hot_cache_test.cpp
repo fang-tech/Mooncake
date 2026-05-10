@@ -85,9 +85,6 @@ std::string getLocalIpAddress() {
 class LocalHotCacheTest : public ::testing::Test {
    protected:
     static void SetUpTestSuite() {
-        google::InitGoogleLogging("LocalHotCacheTest");
-        FLAGS_logtostderr = 1;
-
         // Start in-proc master and metadata servers (non-HA)
         ASSERT_TRUE(master_.Start(InProcMasterConfigBuilder().build()))
             << "Failed to start in-proc master";
@@ -100,12 +97,7 @@ class LocalHotCacheTest : public ::testing::Test {
 
     static void TearDownTestSuite() {
         master_.Stop();
-        google::ShutdownGoogleLogging();
     }
-
-    void SetUp() override {}
-
-    void TearDown() override {}
 
     // Helper to create a slice with test data
     Slice CreateSlice(size_t size, char fill_char = 'A') {

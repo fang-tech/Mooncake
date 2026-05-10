@@ -15,17 +15,6 @@ namespace mooncake {
 // Test fixture for ClientBufferAllocator tests
 class ClientBufferTest : public ::testing::Test {
    protected:
-    void SetUp() override {
-        // Initialize glog for logging
-        google::InitGoogleLogging("ClientBufferTest");
-        FLAGS_logtostderr = 1;  // Output logs to stderr
-    }
-
-    void TearDown() override {
-        // Cleanup glog
-        google::ShutdownGoogleLogging();
-    }
-
     // Helper function to verify buffer handle properties
     void VerifyBufferHandle(const BufferHandle& handle, size_t expected_size) {
         EXPECT_NE(handle.ptr(), nullptr);

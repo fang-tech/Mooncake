@@ -27,14 +27,10 @@ namespace testing {
 class HealthCheckTest : public ::testing::Test {
    protected:
     static void SetUpTestSuite() {
-        google::InitGoogleLogging("HealthCheckTest");
-        FLAGS_logtostderr = 1;
         FLAGS_enable_http_server = true;
         if (getenv("PROTOCOL")) FLAGS_protocol = getenv("PROTOCOL");
         if (getenv("DEVICE_NAME")) FLAGS_device_name = getenv("DEVICE_NAME");
     }
-
-    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
 
     std::shared_ptr<RealClient> py_client_;
     InProcMaster master_;

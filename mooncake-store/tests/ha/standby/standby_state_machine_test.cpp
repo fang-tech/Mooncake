@@ -13,12 +13,10 @@ namespace mooncake::test {
 class StandbyStateMachineTest : public ::testing::Test {
    protected:
     void SetUp() override {
-        google::InitGoogleLogging("StandbyStateMachineTest");
-        FLAGS_logtostderr = true;
         machine_ = std::make_unique<StandbyStateMachine>();
     }
 
-    void TearDown() override { google::ShutdownGoogleLogging(); }
+    void TearDown() override {}
 
     std::unique_ptr<StandbyStateMachine> machine_;
 

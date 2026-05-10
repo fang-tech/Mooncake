@@ -16,13 +16,6 @@ namespace mooncake::test {
 
 class OffloadOnEvictTest : public ::testing::Test {
    protected:
-    void SetUp() override {
-        google::InitGoogleLogging("OffloadOnEvictTest");
-        FLAGS_logtostderr = true;
-    }
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-
     static constexpr size_t kDefaultSegmentBase = 0x300000000;
 
     Segment MakeSegment(std::string name, size_t base, size_t size) const {

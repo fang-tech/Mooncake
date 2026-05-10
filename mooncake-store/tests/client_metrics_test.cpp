@@ -8,17 +8,7 @@
 
 namespace mooncake::test {
 
-class ClientMetricsTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        google::InitGoogleLogging("ClientMetricsTest");
-        FLAGS_logtostderr = true;
-    }
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-};
-
-TEST_F(ClientMetricsTest, TransferMetricsSummaryTest) {
+TEST(ClientMetricsTest, TransferMetricsSummaryTest) {
     TransferMetric metrics;
 
     // Test empty metrics
@@ -59,7 +49,7 @@ TEST_F(ClientMetricsTest, TransferMetricsSummaryTest) {
     std::cout << "Transfer Metrics Summary:\n" << summary << std::endl;
 }
 
-TEST_F(ClientMetricsTest, MasterClientMetricsSummaryTest) {
+TEST(ClientMetricsTest, MasterClientMetricsSummaryTest) {
     MasterClientMetric metrics;
 
     // Test empty metrics
@@ -97,7 +87,7 @@ TEST_F(ClientMetricsTest, MasterClientMetricsSummaryTest) {
     std::cout << "Master Client Metrics Summary:\n" << summary << std::endl;
 }
 
-TEST_F(ClientMetricsTest, ClientMetricsSummaryTest) {
+TEST(ClientMetricsTest, ClientMetricsSummaryTest) {
     ClientMetric metrics;
 
     // Add some transfer data
@@ -132,7 +122,7 @@ TEST_F(ClientMetricsTest, ClientMetricsSummaryTest) {
     std::cout << "Full Client Metrics Summary:\n" << summary << std::endl;
 }
 
-TEST_F(ClientMetricsTest, ByteFormattingTest) {
+TEST(ClientMetricsTest, ByteFormattingTest) {
     TransferMetric metrics;
 
     // Test different byte sizes
@@ -154,7 +144,7 @@ TEST_F(ClientMetricsTest, ByteFormattingTest) {
     EXPECT_TRUE(summary.find("1.00 GB") != std::string::npos);
 }
 
-TEST_F(ClientMetricsTest, CompareWithSerializedMetrics) {
+TEST(ClientMetricsTest, CompareWithSerializedMetrics) {
     ClientMetric metrics;
 
     // Add some data
@@ -185,7 +175,7 @@ TEST_F(ClientMetricsTest, CompareWithSerializedMetrics) {
                 summary.find("No data") != std::string::npos);
 }
 
-TEST_F(ClientMetricsTest, BandwidthSummaryRespectsEnvFlag) {
+TEST(ClientMetricsTest, BandwidthSummaryRespectsEnvFlag) {
     setenv("MC_STORE_CLIENT_METRIC_BANDWIDTH", "0", 1);
     auto metrics = ClientMetric::Create();
     ASSERT_NE(metrics, nullptr);
@@ -197,7 +187,7 @@ TEST_F(ClientMetricsTest, BandwidthSummaryRespectsEnvFlag) {
     unsetenv("MC_STORE_CLIENT_METRIC_BANDWIDTH");
 }
 
-TEST_F(ClientMetricsTest, SummaryCanOmitMasterRpcMetrics) {
+TEST(ClientMetricsTest, SummaryCanOmitMasterRpcMetrics) {
     auto metrics = ClientMetric::Create({}, false);
     ASSERT_NE(metrics, nullptr);
 
@@ -212,7 +202,7 @@ TEST_F(ClientMetricsTest, SummaryCanOmitMasterRpcMetrics) {
                 std::string::npos);
 }
 
-TEST_F(ClientMetricsTest, SerializeWithDynamicLabels) {
+TEST(ClientMetricsTest, SerializeWithDynamicLabels) {
     auto verify = [](const std::string& str) {
         EXPECT_TRUE(str.find("instance_id=\"12345\"") != std::string::npos);
         EXPECT_TRUE(str.find("cluster_id=\"cluster1\"") != std::string::npos);
@@ -261,7 +251,7 @@ TEST_F(ClientMetricsTest, SerializeWithDynamicLabels) {
     }
 }
 
-TEST_F(ClientMetricsTest, SerializeWithoutDynamicLabels) {
+TEST(ClientMetricsTest, SerializeWithoutDynamicLabels) {
     auto verify = [](const std::string& str) {
         EXPECT_TRUE(str.find("instance_id") == std::string::npos);
         EXPECT_TRUE(str.find("cluster_id") == std::string::npos);

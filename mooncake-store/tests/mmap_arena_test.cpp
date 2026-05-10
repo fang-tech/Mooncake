@@ -18,15 +18,7 @@ namespace mooncake {
 
 class MmapArenaTest : public ::testing::Test {
    protected:
-    static void SetUpTestSuite() {
-        google::InitGoogleLogging("MmapArenaTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
-
     void SetUp() override {
-        FLAGS_logtostderr = 1;
         FLAGS_minloglevel = google::WARNING;  // Reduce log noise in tests
     }
 };

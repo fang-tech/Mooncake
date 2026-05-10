@@ -37,18 +37,8 @@ namespace testing {
 // Unit tests for IPv6 address parsing functions
 //=============================================================================
 
-class IPv6ParsingTest : public ::testing::Test {
-   protected:
-    static void SetUpTestSuite() {
-        google::InitGoogleLogging("IPv6ParsingTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
-};
-
 // Test isValidIpV6 function with various IPv6 address formats
-TEST_F(IPv6ParsingTest, IsValidIpV6) {
+TEST(IPv6ParsingTest, IsValidIpV6) {
     // Valid IPv6 addresses
     EXPECT_TRUE(isValidIpV6("::1")) << "Loopback address should be valid";
     EXPECT_TRUE(isValidIpV6("::")) << "Any address should be valid";
@@ -78,7 +68,7 @@ TEST_F(IPv6ParsingTest, IsValidIpV6) {
 }
 
 // Test parseHostNameWithPort function with IPv6 addresses
-TEST_F(IPv6ParsingTest, ParseHostNameWithPort) {
+TEST(IPv6ParsingTest, ParseHostNameWithPort) {
     // Test bracketed IPv6 with port
     {
         auto [host, port] = parseHostNameWithPort("[::1]:17813");
@@ -138,7 +128,7 @@ TEST_F(IPv6ParsingTest, ParseHostNameWithPort) {
 }
 
 // Test maybeWrapIpV6 function
-TEST_F(IPv6ParsingTest, MaybeWrapIpV6) {
+TEST(IPv6ParsingTest, MaybeWrapIpV6) {
     // IPv6 addresses should be wrapped
     EXPECT_EQ(maybeWrapIpV6("::1"), "[::1]") << "Loopback should be wrapped";
     EXPECT_EQ(maybeWrapIpV6("fe80::1%eth0"), "[fe80::1%eth0]")
@@ -155,7 +145,7 @@ TEST_F(IPv6ParsingTest, MaybeWrapIpV6) {
 }
 
 // Test that IPv6 address with different formats are handled correctly
-TEST_F(IPv6ParsingTest, IPv6AddressFormatVariations) {
+TEST(IPv6ParsingTest, IPv6AddressFormatVariations) {
     // Test different IPv6 address formats that should be parsed correctly
     std::vector<std::pair<std::string, std::pair<std::string, uint16_t>>>
         test_cases = {
@@ -178,13 +168,6 @@ TEST_F(IPv6ParsingTest, IPv6AddressFormatVariations) {
 
 class IPv6ClientTest : public ::testing::Test {
    protected:
-    static void SetUpTestSuite() {
-        google::InitGoogleLogging("IPv6ClientTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
-
     void SetUp() override {
         // Override flags from environment variables if present
         if (getenv("PROTOCOL")) FLAGS_protocol = getenv("PROTOCOL");

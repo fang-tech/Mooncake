@@ -279,10 +279,6 @@ AllocationHandleWrapper& AllocationHandleWrapper::operator=(
 
 class OffsetAllocatorTest : public ::testing::Test {
    protected:
-    void SetUp() override {}
-
-    void TearDown() override {}
-
     OffsetAllocationHandle copyHandleWithNewAllocator(
         const OffsetAllocationHandle& handle,
         const std::shared_ptr<OffsetAllocator>& new_allocator) {

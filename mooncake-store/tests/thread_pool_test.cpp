@@ -8,18 +8,8 @@
 
 namespace mooncake {
 
-class ThreadPoolTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        google::InitGoogleLogging("ThreadPoolTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-};
-
 // Test basic task execution
-TEST_F(ThreadPoolTest, BasicTaskExecution) {
+TEST(ThreadPoolTest, BasicTaskExecution) {
     ThreadPool pool(2);
     std::atomic<int> counter(0);
     std::mutex mtx;
@@ -43,7 +33,7 @@ TEST_F(ThreadPoolTest, BasicTaskExecution) {
 }
 
 // Test parallel execution
-TEST_F(ThreadPoolTest, ParallelExecution) {
+TEST(ThreadPoolTest, ParallelExecution) {
     const size_t num_threads = 4;
     ThreadPool pool(num_threads);
     std::atomic<int> running_threads(0);
@@ -80,7 +70,7 @@ TEST_F(ThreadPoolTest, ParallelExecution) {
 }
 
 // Test proper stop
-TEST_F(ThreadPoolTest, ProperStop) {
+TEST(ThreadPoolTest, ProperStop) {
     ThreadPool pool(2);
     std::atomic<int> counter(0);
     std::mutex mtx;
@@ -110,7 +100,7 @@ TEST_F(ThreadPoolTest, ProperStop) {
 }
 
 // Test stress with many tasks
-TEST_F(ThreadPoolTest, StressTest) {
+TEST(ThreadPoolTest, StressTest) {
     const int num_tasks = 1000;
     ThreadPool pool(4);
     std::atomic<int> counter(0);

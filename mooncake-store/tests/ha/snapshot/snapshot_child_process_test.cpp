@@ -39,9 +39,6 @@ class SnapshotChildProcessTest : public ::testing::Test {
         "MOONCAKE_SNAPSHOT_LOCAL_PATH";
 
     void SetUp() override {
-        google::InitGoogleLogging("SnapshotChildProcessTest");
-        FLAGS_logtostderr = true;
-
         // Reset metric state for isolation
         MasterMetricManager::instance().reset_allocated_mem_size();
         MasterMetricManager::instance().reset_total_mem_capacity();
@@ -63,7 +60,6 @@ class SnapshotChildProcessTest : public ::testing::Test {
             fs::remove_all(tmp_dir());
         }
         ::unsetenv(kEnvSnapshotLocalPath);
-        google::ShutdownGoogleLogging();
     }
 
     // Create a default service with snapshot_restore enabled (backend

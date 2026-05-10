@@ -94,9 +94,6 @@ tl::expected<std::string, int> HttpPostJson(const std::string& url,
 class TaskExecutorIntegrationTest : public ::testing::Test {
    protected:
     static void SetUpTestSuite() {
-        google::InitGoogleLogging("TaskExecutorIntegrationTest");
-        FLAGS_logtostderr = 1;
-
         // Override flags from environment variables if present
         if (getenv("PROTOCOL")) FLAGS_protocol = getenv("PROTOCOL");
         if (getenv("DEVICE_NAME")) FLAGS_device_name = getenv("DEVICE_NAME");
@@ -127,7 +124,6 @@ class TaskExecutorIntegrationTest : public ::testing::Test {
     static void TearDownTestSuite() {
         CleanupClients();
         master_.Stop();
-        google::ShutdownGoogleLogging();
     }
 
     void SetUp() override {

@@ -8,23 +8,8 @@
 
 namespace mooncake {
 
-// Test fixture for EvictionStrategy tests
-class EvictionStrategyTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        // Initialize glog for logging
-        google::InitGoogleLogging("EvictionStrategyTest");
-        FLAGS_logtostderr = 1;  // Output logs to stderr
-    }
-
-    void TearDown() override {
-        // Cleanup glog
-        google::ShutdownGoogleLogging();
-    }
-};
-
 // Test LRUEvictionStrategy AddKey and RemoveKey functionality
-TEST_F(EvictionStrategyTest, AddAndRemoveKey) {
+TEST(EvictionStrategyTest, AddAndRemoveKey) {
     LRUEvictionStrategy eviction_strategy;
 
     // Add keys
@@ -43,7 +28,7 @@ TEST_F(EvictionStrategyTest, AddAndRemoveKey) {
 }
 
 // Test LRUEvictionStrategy EvictKey functionality
-TEST_F(EvictionStrategyTest, EvictKey) {
+TEST(EvictionStrategyTest, EvictKey) {
     LRUEvictionStrategy eviction_strategy;
 
     // Add keys
@@ -75,7 +60,7 @@ TEST_F(EvictionStrategyTest, EvictKey) {
 }
 
 // Test FIFOEvictionStrategy AddKey and RemoveKey functionality
-TEST_F(EvictionStrategyTest, FIFOAddAndRemoveKey) {
+TEST(EvictionStrategyTest, FIFOAddAndRemoveKey) {
     FIFOEvictionStrategy eviction_strategy;
 
     // Add keys
@@ -96,7 +81,7 @@ TEST_F(EvictionStrategyTest, FIFOAddAndRemoveKey) {
 }
 
 // Test FIFOEvictionStrategy EvictKey functionality
-TEST_F(EvictionStrategyTest, FIFOEvictKey) {
+TEST(EvictionStrategyTest, FIFOEvictKey) {
     FIFOEvictionStrategy eviction_strategy;
 
     // Add keys

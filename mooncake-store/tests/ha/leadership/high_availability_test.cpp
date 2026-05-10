@@ -23,17 +23,11 @@ DEFINE_string(etcd_test_key_prefix, "mooncake-store/test/",
               "The prefix of the test keys in ETCD");
 
 void HighAvailabilityTest::SetUpTestSuite() {
-    // Initialize glog
-    google::InitGoogleLogging("HighAvailabilityTest");
-
     // Set VLOG level to 1 for detailed logs
     google::SetVLOGLevel("*", 1);
-    FLAGS_logtostderr = 1;
 }
 
-void HighAvailabilityTest::TearDownTestSuite() {
-    google::ShutdownGoogleLogging();
-}
+void HighAvailabilityTest::TearDownTestSuite() {}
 
 namespace {
 

@@ -10,17 +10,6 @@ namespace mooncake {
 // Test fixture for Segment tests
 class SegmentTest : public ::testing::Test {
    protected:
-    void SetUp() override {
-        // Initialize glog for logging
-        google::InitGoogleLogging("EvictionStrategyTest");
-        FLAGS_logtostderr = 1;  // Output logs to stderr
-    }
-
-    void TearDown() override {
-        // Cleanup glog
-        google::ShutdownGoogleLogging();
-    }
-
     void ValidateMountedSegments(const SegmentManager& segment_manager,
                                  const std::vector<Segment>& segments,
                                  const std::vector<UUID>& client_ids) {

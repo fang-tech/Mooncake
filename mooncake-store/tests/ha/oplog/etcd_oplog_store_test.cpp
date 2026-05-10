@@ -20,9 +20,6 @@ class EtcdOpLogStoreTest : public ::testing::Test {
    protected:
     static void SetUpTestSuite() {
 #ifdef STORE_USE_ETCD
-        google::InitGoogleLogging("EtcdOpLogStoreTest");
-        FLAGS_logtostderr = 1;
-
         ASSERT_EQ(ErrorCode::OK,
                   EtcdHelper::ConnectToEtcdStoreClient(FLAGS_etcd_endpoints))
             << "Failed to connect to etcd at " << FLAGS_etcd_endpoints;
@@ -31,7 +28,6 @@ class EtcdOpLogStoreTest : public ::testing::Test {
 
     static void TearDownTestSuite() {
 #ifdef STORE_USE_ETCD
-        google::ShutdownGoogleLogging();
 #endif
     }
 

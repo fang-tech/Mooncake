@@ -22,8 +22,6 @@ class FileStorageTest : public ::testing::Test {
    protected:
     std::string data_path;
     void SetUp() override {
-        google::InitGoogleLogging("FileStorageTest");
-        FLAGS_logtostderr = true;
         UnsetEnv("MOONCAKE_OFFLOAD_FILE_STORAGE_PATH");
         UnsetEnv("MOONCAKE_OFFLOAD_LOCAL_BUFFER_SIZE_BYTES");
         UnsetEnv("MOONCAKE_OFFLOAD_SCANMETA_ITERATOR_KEYS_LIMIT");
@@ -92,7 +90,6 @@ class FileStorageTest : public ::testing::Test {
     }
 
     void TearDown() override {
-        google::ShutdownGoogleLogging();
         LOG(INFO) << "Clear test data...";
         for (const auto& entry : fs::directory_iterator(data_path)) {
             if (entry.is_regular_file()) {

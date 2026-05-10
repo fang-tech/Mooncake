@@ -17,17 +17,7 @@ std::unique_ptr<MasterService> CreateMasterServiceWithSSDFeat(
         MasterServiceConfig::builder().set_root_fs_dir(root_fs_dir).build());
 }
 
-class MasterServiceSSDTest : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        google::InitGoogleLogging("MasterServiceTest");
-        FLAGS_logtostderr = true;
-    }
-
-    void TearDown() override { google::ShutdownGoogleLogging(); }
-};
-
-TEST_F(MasterServiceSSDTest, PutEndBothReplica) {
+TEST(MasterServiceSSDTest, PutEndBothReplica) {
     auto service_ = CreateMasterServiceWithSSDFeat("/mnt/ssd");
 
     constexpr size_t buffer = 0x300000000;
@@ -82,7 +72,7 @@ TEST_F(MasterServiceSSDTest, PutEndBothReplica) {
     }
 }
 
-TEST_F(MasterServiceSSDTest, PutRevokeDiskReplica) {
+TEST(MasterServiceSSDTest, PutRevokeDiskReplica) {
     auto service_ = CreateMasterServiceWithSSDFeat("/mnt/ssd");
 
     constexpr size_t buffer = 0x300000000;
@@ -123,7 +113,7 @@ TEST_F(MasterServiceSSDTest, PutRevokeDiskReplica) {
     ASSERT_TRUE(get_result.value().replicas[0].is_memory_replica());
 }
 
-TEST_F(MasterServiceSSDTest, PutRevokeMemoryReplica) {
+TEST(MasterServiceSSDTest, PutRevokeMemoryReplica) {
     auto service_ = CreateMasterServiceWithSSDFeat("/mnt/ssd");
 
     constexpr size_t buffer = 0x300000000;
@@ -162,7 +152,7 @@ TEST_F(MasterServiceSSDTest, PutRevokeMemoryReplica) {
     ASSERT_TRUE(get_result.value().replicas[0].is_disk_replica());
 }
 
-TEST_F(MasterServiceSSDTest, PutRevokeBothReplica) {
+TEST(MasterServiceSSDTest, PutRevokeBothReplica) {
     auto service_ = CreateMasterServiceWithSSDFeat("/mnt/ssd");
 
     constexpr size_t buffer = 0x300000000;
@@ -200,7 +190,7 @@ TEST_F(MasterServiceSSDTest, PutRevokeBothReplica) {
     EXPECT_EQ(ErrorCode::OBJECT_NOT_FOUND, get_result.error());
 }
 
-TEST_F(MasterServiceSSDTest, RemoveKey) {
+TEST(MasterServiceSSDTest, RemoveKey) {
     auto service_ = CreateMasterServiceWithSSDFeat("/mnt/ssd");
 
     constexpr size_t buffer = 0x300000000;
@@ -236,7 +226,7 @@ TEST_F(MasterServiceSSDTest, RemoveKey) {
     EXPECT_EQ(ErrorCode::OBJECT_NOT_FOUND, get_result.error());
 }
 
-TEST_F(MasterServiceSSDTest, EvictObject) {
+TEST(MasterServiceSSDTest, EvictObject) {
     auto service_ = CreateMasterServiceWithSSDFeat("/mnt/ssd");
     // Mount a segment that can hold about 1024 * 16 objects.
     // As the eviction is processed separately for each shard,
@@ -296,7 +286,7 @@ TEST_F(MasterServiceSSDTest, EvictObject) {
     service_->RemoveAll();
 }
 
-TEST_F(MasterServiceSSDTest, PutStartExpires) {
+TEST(MasterServiceSSDTest, PutStartExpires) {
     // Reset storage space metrics.
     MasterMetricManager::instance().reset_allocated_mem_size();
     MasterMetricManager::instance().reset_total_mem_capacity();
@@ -405,7 +395,7 @@ TEST_F(MasterServiceSSDTest, PutStartExpires) {
     test_discard_replica(ReplicaType::MEMORY);
 }
 
-TEST_F(MasterServiceSSDTest, EvictDiskReplica_RemovesDiskReplica) {
+TEST(MasterServiceSSDTest, EvictDiskReplica_RemovesDiskReplica) {
     auto service_ = CreateMasterServiceWithSSDFeat("/mnt/ssd");
 
     constexpr size_t buffer = 0x300000000;
@@ -449,7 +439,7 @@ TEST_F(MasterServiceSSDTest, EvictDiskReplica_RemovesDiskReplica) {
     EXPECT_TRUE(get_result.value().replicas[0].is_memory_replica());
 }
 
-TEST_F(MasterServiceSSDTest, EvictDiskReplica_NonExistentKeyReturnsError) {
+TEST(MasterServiceSSDTest, EvictDiskReplica_NonExistentKeyReturnsError) {
     auto service_ = CreateMasterServiceWithSSDFeat("/mnt/ssd");
 
     UUID client_id = generate_uuid();
@@ -459,7 +449,7 @@ TEST_F(MasterServiceSSDTest, EvictDiskReplica_NonExistentKeyReturnsError) {
     EXPECT_EQ(evict_result.error(), ErrorCode::OBJECT_NOT_FOUND);
 }
 
-TEST_F(MasterServiceSSDTest, EvictDiskReplica_InvalidReplicaTypeReturnsError) {
+TEST(MasterServiceSSDTest, EvictDiskReplica_InvalidReplicaTypeReturnsError) {
     auto service_ = CreateMasterServiceWithSSDFeat("/mnt/ssd");
 
     constexpr size_t buffer = 0x300000000;

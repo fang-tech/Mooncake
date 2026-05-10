@@ -19,9 +19,6 @@ class LocalFileSnapshotObjectStoreTest : public ::testing::Test {
     std::unique_ptr<LocalFileSnapshotObjectStore> backend_;
 
     void SetUp() override {
-        google::InitGoogleLogging("LocalFileSnapshotObjectStoreTest");
-        FLAGS_logtostderr = true;
-
         // Create a unique temporary directory
         std::string tmpl = (fs::temp_directory_path() /
                             "local_file_snapshot_object_store_test_XXXXXX")
@@ -38,7 +35,6 @@ class LocalFileSnapshotObjectStoreTest : public ::testing::Test {
         if (!tmp_dir().empty() && fs::exists(tmp_dir())) {
             fs::remove_all(tmp_dir());
         }
-        google::ShutdownGoogleLogging();
     }
 
    private:

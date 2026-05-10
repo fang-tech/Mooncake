@@ -28,9 +28,6 @@ class HotStandbySnapshotBootstrapTest
     : public ::testing::TestWithParam<CatalogBackendParam> {
    protected:
     void SetUp() override {
-        google::InitGoogleLogging("HotStandbySnapshotBootstrapTest");
-        FLAGS_logtostderr = 1;
-
         if (GetParam().requires_redis && FLAGS_redis_endpoint.empty()) {
             GTEST_SKIP() << "Redis endpoint is not configured";
         }
@@ -60,7 +57,6 @@ class HotStandbySnapshotBootstrapTest
         if (!temp_dir_.empty() && fs::exists(temp_dir_)) {
             fs::remove_all(temp_dir_);
         }
-        google::ShutdownGoogleLogging();
     }
 
     HotStandbyConfig MakeSnapshotOnlyConfig() const {

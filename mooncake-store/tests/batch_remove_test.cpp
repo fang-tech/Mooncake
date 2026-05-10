@@ -42,9 +42,6 @@ class BatchRemoveTest : public ::testing::Test {
     }
 
     static void SetUpTestSuite() {
-        google::InitGoogleLogging("BatchRemoveTest");
-        FLAGS_logtostderr = 1;
-
         if (getenv("PROTOCOL")) FLAGS_protocol = getenv("PROTOCOL");
         if (getenv("DEVICE_NAME")) FLAGS_device_name = getenv("DEVICE_NAME");
 
@@ -71,7 +68,6 @@ class BatchRemoveTest : public ::testing::Test {
         CleanupSegment();
         CleanupClients();
         master_.Stop();
-        google::ShutdownGoogleLogging();
     }
 
     static void InitializeSegment() {

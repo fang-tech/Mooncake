@@ -37,13 +37,6 @@ class GLogMuter {
 
 class RealClientTest : public ::testing::Test {
    protected:
-    static void SetUpTestSuite() {
-        google::InitGoogleLogging("RealClientTest");
-        FLAGS_logtostderr = 1;
-    }
-
-    static void TearDownTestSuite() { google::ShutdownGoogleLogging(); }
-
     void SetUp() override {
         // Override flags from environment variables if present
         if (getenv("PROTOCOL")) FLAGS_protocol = getenv("PROTOCOL");
