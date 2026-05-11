@@ -18,6 +18,7 @@
 #include "types.h"
 #include "utils.h"
 #include "test_server_helpers.h"
+#include "store_test_helper.h"
 #include "default_config.h"
 
 DEFINE_string(protocol, "tcp", "Transfer protocol: rdma|tcp");
@@ -28,58 +29,6 @@ DEFINE_uint64(default_kv_lease_ttl, mooncake::DEFAULT_DEFAULT_KV_LEASE_TTL,
 
 namespace mooncake {
 namespace testing {
-
-// Helper functions for client_id parsing
-std::string FormatClientId(const UUID& client_id) {
-    return std::to_string(client_id.first) + "-" +
-           std::to_string(client_id.second);
-}
-
-UUID ParseClientId(const std::string& client_id_str) {
-    UUID client_id{0, 0};
-    size_t dash_pos = client_id_str.find('-');
-    if (dash_pos != std::string::npos) {
-        try {
-            client_id.first = std::stoull(client_id_str.substr(0, dash_pos));
-            client_id.second = std::stoull(client_id_str.substr(dash_pos + 1));
-        } catch (const std::exception& e) {
-            LOG(ERROR) << "Failed to parse client_id: " << e.what();
-        }
-    } else {
-        LOG(ERROR) << "Invalid client_id format. Expected format: first-second";
-    }
-    return client_id;
-}
-
-class ClientIdCaptureSink : public google::LogSink {
-   public:
-    std::string captured_client_id;
-
-    void send(google::LogSeverity severity, const char* full_filename,
-              const char* base_filename, int line, const struct ::tm* tm_time,
-              const char* message, size_t message_len) override {
-        (void)severity;
-        (void)full_filename;
-        (void)base_filename;
-        (void)line;
-        (void)tm_time;
-
-        std::string msg(message, message_len);
-
-        size_t pos = msg.find("client_id=");
-        if (pos != std::string::npos) {
-            std::string client_id_str = msg.substr(pos + 10);
-            client_id_str.erase(0, client_id_str.find_first_not_of(" \t\n\r"));
-            client_id_str.erase(client_id_str.find_last_not_of(" \t\n\r") + 1);
-
-            std::regex uuid_pattern(R"((\d+)-(\d+))");
-            std::smatch match;
-            if (std::regex_search(client_id_str, match, uuid_pattern)) {
-                captured_client_id = match[0].str();
-            }
-        }
-    }
-};
 
 class ClientIntegrationTest : public ::testing::Test {
    protected:

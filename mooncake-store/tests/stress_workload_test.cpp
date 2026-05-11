@@ -37,6 +37,8 @@ DEFINE_string(local_hostname, "localhost:12345", "Local hostname for client");
 DEFINE_string(metadata_connection_string, "P2PHANDSHAKE",
               "Metadata connection string");
 
+// TODO
+
 namespace mooncake {
 namespace benchmark {
 

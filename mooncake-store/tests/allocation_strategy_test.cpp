@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "allocator.h"
+#include "store_test_helper.h"
 #include "types.h"
 
 namespace mooncake {
@@ -49,24 +50,6 @@ class AllocationStrategyParameterizedTest
         auto [strategy_type, allocator_type] = GetParam();
         strategy_ = CreateAllocationStrategy(strategy_type);
         allocator_type_ = allocator_type;
-    }
-
-    // Helper function to create a BufferAllocator for testing
-    // Using segment_name as transport_endpoint for simplicity
-    std::shared_ptr<BufferAllocatorBase> CreateTestAllocator(
-        const std::string& segment_name, size_t base_offset,
-        size_t size = 64 * MiB) {
-        const size_t base = 0x100000000ULL + base_offset;  // 4GB + offset
-        switch (allocator_type_) {
-            case BufferAllocatorType::CACHELIB:
-                return std::make_shared<CachelibBufferAllocator>(
-                    segment_name, base, size, segment_name);
-            case BufferAllocatorType::OFFSET:
-                return std::make_shared<OffsetBufferAllocator>(
-                    segment_name, base, size, segment_name);
-            default:
-                throw std::invalid_argument("Invalid allocator type");
-        }
     }
 
     BufferAllocatorType allocator_type_;
@@ -123,8 +106,9 @@ TEST_F(AllocationStrategyTest, PreferredSegmentWithEmptyAllocators) {
 
 // Test preferred segment allocation when available
 TEST_P(AllocationStrategyParameterizedTest, PreferredSegmentAllocation) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("preferred", 0x10000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("preferred", 0x10000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -149,8 +133,9 @@ TEST_P(AllocationStrategyParameterizedTest, PreferredSegmentAllocation) {
 
 // Test fallback to random allocation when preferred segment doesn't exist
 TEST_P(AllocationStrategyParameterizedTest, PreferredSegmentNotFound) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("segment2", 0x10000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("segment2", 0x10000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -175,8 +160,9 @@ TEST_P(AllocationStrategyParameterizedTest, PreferredSegmentNotFound) {
 
 // Test single slice allocation
 TEST_P(AllocationStrategyParameterizedTest, SingleSliceAllocation) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("segment2", 0x10000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("segment2", 0x10000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -198,9 +184,11 @@ TEST_P(AllocationStrategyParameterizedTest, SingleSliceAllocation) {
 
 // Test multiple replicas allocation
 TEST_P(AllocationStrategyParameterizedTest, MultipleReplicasAllocation) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("segment2", 0x10000000ULL);
-    auto allocator3 = CreateTestAllocator("segment3", 0x20000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("segment2", 0x10000000ULL, allocator_type_);
+    auto allocator3 =
+        CreateTestAllocator("segment3", 0x20000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -236,8 +224,9 @@ TEST_P(AllocationStrategyParameterizedTest, MultipleReplicasAllocation) {
 
 // Test allocation when preferred segment has insufficient space
 TEST_P(AllocationStrategyParameterizedTest, PreferredSegmentInsufficientSpace) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("preferred", 0x10000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("preferred", 0x10000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -277,8 +266,9 @@ TEST_P(AllocationStrategyParameterizedTest, PreferredSegmentInsufficientSpace) {
 
 // Test allocation when all allocators are full
 TEST_P(AllocationStrategyParameterizedTest, AllAllocatorsFull) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("segment2", 0x10000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("segment2", 0x10000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -307,7 +297,7 @@ TEST_P(AllocationStrategyParameterizedTest, AllAllocatorsFull) {
 
 // Test allocation with zero size
 TEST_P(AllocationStrategyParameterizedTest, ZeroSizeAllocation) {
-    auto allocator = CreateTestAllocator("segment1", 0);
+    auto allocator = CreateTestAllocator("segment1", 0, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator);
@@ -321,7 +311,7 @@ TEST_P(AllocationStrategyParameterizedTest, ZeroSizeAllocation) {
 
 // Test allocation with very large size
 TEST_P(AllocationStrategyParameterizedTest, VeryLargeSizeAllocation) {
-    auto allocator = CreateTestAllocator("segment1", 0);
+    auto allocator = CreateTestAllocator("segment1", 0, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator);
@@ -394,10 +384,13 @@ TEST_F(AllocationStrategyTest, InsufficientAllocatorsForReplicas) {
 // Test allocation with multiple preferred segments
 TEST_P(AllocationStrategyParameterizedTest,
        MultiplePreferredSegmentsAllocation) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("preferred1", 0x10000000ULL);
-    auto allocator3 = CreateTestAllocator("preferred2", 0x20000000ULL);
-    auto allocator4 = CreateTestAllocator("segment4", 0x30000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("preferred1", 0x10000000ULL, allocator_type_);
+    auto allocator3 =
+        CreateTestAllocator("preferred2", 0x20000000ULL, allocator_type_);
+    auto allocator4 =
+        CreateTestAllocator("segment4", 0x30000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -426,10 +419,13 @@ TEST_P(AllocationStrategyParameterizedTest,
 
 // Test allocation with excluded segments
 TEST_P(AllocationStrategyParameterizedTest, ExcludedSegmentsAllocation) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("segment2", 0x10000000ULL);
-    auto allocator3 = CreateTestAllocator("segment3", 0x20000000ULL);
-    auto allocator4 = CreateTestAllocator("segment4", 0x30000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("segment2", 0x10000000ULL, allocator_type_);
+    auto allocator3 =
+        CreateTestAllocator("segment3", 0x20000000ULL, allocator_type_);
+    auto allocator4 =
+        CreateTestAllocator("segment4", 0x30000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -479,10 +475,13 @@ TEST_F(AllocationStrategyTest, AllSegmentsExcluded) {
 // Test allocation with preferred segments and excluded segments combination
 TEST_P(AllocationStrategyParameterizedTest,
        PreferredAndExcludedSegmentsCombination) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("preferred", 0x10000000ULL);
-    auto allocator3 = CreateTestAllocator("segment3", 0x20000000ULL);
-    auto allocator4 = CreateTestAllocator("segment4", 0x30000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("preferred", 0x10000000ULL, allocator_type_);
+    auto allocator3 =
+        CreateTestAllocator("segment3", 0x20000000ULL, allocator_type_);
+    auto allocator4 =
+        CreateTestAllocator("segment4", 0x30000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -521,9 +520,11 @@ TEST_P(AllocationStrategyParameterizedTest,
 // precedence)
 TEST_P(AllocationStrategyParameterizedTest,
        PreferredAndExcludedSegmentsConflict) {
-    auto allocator1 = CreateTestAllocator("segment1", 0);
-    auto allocator2 = CreateTestAllocator("segment2", 0x10000000ULL);
-    auto allocator3 = CreateTestAllocator("segment3", 0x20000000ULL);
+    auto allocator1 = CreateTestAllocator("segment1", 0, allocator_type_);
+    auto allocator2 =
+        CreateTestAllocator("segment2", 0x10000000ULL, allocator_type_);
+    auto allocator3 =
+        CreateTestAllocator("segment3", 0x20000000ULL, allocator_type_);
 
     AllocatorManager allocator_manager;
     allocator_manager.addAllocator("segment1", allocator1);
@@ -575,7 +576,8 @@ TEST_P(AllocationStrategyParameterizedTest,
     for (size_t i = 0; i < kNumSegments; i++) {
         const auto name = std::to_string(i) + "-segment";
         allocator_manager.addAllocator(
-            name, CreateTestAllocator(name, i * 128 * MiB, kSegmentSizes[i]));
+            name, CreateTestAllocator(name, i * 128 * MiB, allocator_type_,
+                                      kSegmentSizes[i]));
     }
 
     std::array<size_t, kNumSegments> count = {0};

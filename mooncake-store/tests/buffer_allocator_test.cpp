@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "allocator.h"
+#include "store_test_helper.h"
 #include "types.h"
 
 namespace mooncake {
@@ -18,24 +19,6 @@ namespace mooncake {
 // Test fixture for BufferAllocator tests
 class BufferAllocatorTest : public ::testing::Test {
    protected:
-
-    // Helper function to create a BufferAllocator for testing
-    std::shared_ptr<BufferAllocatorBase> CreateTestAllocator(
-        const std::string& segment_name, size_t base_offset, size_t size,
-        BufferAllocatorType allocator_type) {
-        const size_t base = 0x100000000ULL + base_offset;  // 4GB + offset
-        switch (allocator_type) {
-            case BufferAllocatorType::CACHELIB:
-                return std::make_shared<CachelibBufferAllocator>(
-                    segment_name, base, size, segment_name);
-            case BufferAllocatorType::OFFSET:
-                return std::make_shared<OffsetBufferAllocator>(
-                    segment_name, base, size, segment_name);
-            default:
-                throw std::invalid_argument("Invalid allocator type");
-        }
-    }
-
     void VerifyAllocatedBuffer(const AllocatedBuffer& bufHandle,
                                size_t alloc_size,
                                const std::string& segment_name,
@@ -57,7 +40,7 @@ TEST_F(BufferAllocatorTest, AllocateAndDeallocate) {
         std::string segment_name = "1";
         size_t size = 1024 * 1024 * 16;  // 16MB (multiple of 4MB)
         auto allocator =
-            CreateTestAllocator(segment_name, 0, size, allocator_type);
+            CreateTestAllocator(segment_name, 0, allocator_type, size);
 
         // Allocate memory block
         size_t alloc_size = 1024;
@@ -79,7 +62,7 @@ TEST_F(BufferAllocatorTest, AllocateMultiple) {
         std::string segment_name = "1";
         size_t size = 1024 * 1024 * 16;  // 16MB (must be multiple of 4MB)
         auto allocator =
-            CreateTestAllocator(segment_name, 0, size, allocator_type);
+            CreateTestAllocator(segment_name, 0, allocator_type, size);
 
         // Allocate multiple memory blocks
         size_t alloc_size = 1024 * 1024;  // 1MB per block
@@ -107,8 +90,8 @@ TEST_F(BufferAllocatorTest, AllocateTooLarge) {
         std::string segment_name = "3";
         size_t size = 1024 * 1024 * 16;  // 16MB (must be multiple of 4MB)
 
-        auto allocator = CreateTestAllocator(segment_name, 0x20000000ULL, size,
-                                             allocator_type);
+        auto allocator = CreateTestAllocator(segment_name, 0x20000000ULL, allocator_type,
+                                             size);
 
         // Attempt to allocate more than total buffer size
         size_t alloc_size = size + 1;
@@ -123,8 +106,8 @@ TEST_F(BufferAllocatorTest, RepeatAllocateAndDeallocate) {
     for (const auto& allocator_type : allocator_types_) {
         std::string segment_name = "test";
         size_t size = 1024 * 1024 * 16;  // 16MB (must be multiple of 4MB)
-        auto allocator = CreateTestAllocator(segment_name, 0x20000000ULL, size,
-                                             allocator_type);
+        auto allocator = CreateTestAllocator(segment_name, 0x20000000ULL, allocator_type,
+                                             size);
 
         // Allocate and deallocate multiple times
         size_t alloc_size = 1024;
@@ -142,8 +125,8 @@ TEST_F(BufferAllocatorTest, ParallelAllocation) {
     for (const auto& allocator_type : allocator_types_) {
         std::string segment_name = "test";
         size_t size = 1024 * 1024 * 32;  // 32MB (must be multiple of 4MB)
-        auto allocator = CreateTestAllocator(segment_name, 0x20000000ULL, size,
-                                             allocator_type);
+        auto allocator = CreateTestAllocator(segment_name, 0x20000000ULL, allocator_type,
+                                             size);
 
         const int num_threads = 4;
         const auto test_duration = std::chrono::seconds(1);
